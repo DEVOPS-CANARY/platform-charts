@@ -2,7 +2,7 @@
 
 Platform Helm charts for DEVOPS-CANARY. Apps don't copy Kubernetes YAML: each
 environment fills in a short values file in
-[GitOps-Repo](https://github.com/DEVOPS-CANARY/GitOps-Repo), and Argo CD
+[platform-gitops](https://github.com/DEVOPS-CANARY/platform-gitops), and Argo CD
 renders it with a **pinned version** of a chart from this repo.
 
 | Chart | For | Published as |
@@ -15,7 +15,7 @@ renders it with a **pinned version** of a chart from this repo.
 |---|---|---|
 | App repos | Developers | Code, Dockerfile, a short CI file. **No Kubernetes files.** |
 | **helm-charts** (this repo) | Platform | *How* an app runs: probes, security, rollouts, routing |
-| GitOps-Repo | Platform + CI bot | *What* runs where: values per app per environment, image digests, sealed secrets |
+| platform-gitops | Platform + CI bot | *What* runs where: values per app per environment, image digests, sealed secrets |
 
 ## How `rssb-app` builds a component
 
@@ -40,7 +40,7 @@ copied. Use it for workers whose CPU stays low while a backlog grows (they wait 
 SMS or other services).
 
 So a values file only lists what differs. See [`values.yaml`](charts/rssb-app/values.yaml)
-for every option and its default, and GitOps-Repo `apps/logistics/envs/uat/values.yaml`
+for every option and its default, and platform-gitops `apps/logistics/envs/uat/values.yaml`
 for a real example.
 
 **Not configurable, on purpose:** the pod security settings (non-root, read-only
@@ -67,7 +67,7 @@ A shared chart is only worth it while anyone on the team can read it. So:
   template logic when a default in `values.yaml` would do.
 - **Platform rules are not options.** Security contexts and the selector label are fixed.
 - **Owners review every chart PR.** Most of the team only ever edits values files in
-  GitOps-Repo.
+  platform-gitops.
 
 ## Changing a chart
 
@@ -85,5 +85,5 @@ Test locally (use Helm **v4.2.1**, the version Argo CD v3.5.5 renders with):
 
 ```sh
 helm lint --strict charts/rssb-app -f charts/rssb-app/ci/overrides-values.yaml
-helm template logistics charts/rssb-app -f ../GitOps-Repo/apps/logistics/envs/uat/values.yaml
+helm template logistics charts/rssb-app -f ../platform-gitops/apps/logistics/envs/uat/values.yaml
 ```

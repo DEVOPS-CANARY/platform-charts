@@ -76,7 +76,7 @@ componentDefaults:
     # It gets the same DB_* variables and URL; no second role or database.
     existingSecret: ""
     name: "" # default: the namespace with '_' (todo-uat -> todo_uat); also the role name
-    providerConfig: lab-postgres
+    providerConfig: platform-postgres # the platform's connection, the same name on every cluster
     urlEnv: DATABASE_URL
     urlSuffix: "" # e.g. "?sslmode=require"
     # Orphan: removing the component from Git keeps the database and its data
@@ -89,7 +89,7 @@ componentDefaults:
   kafka:
     managed: false
     existingSecret: "" # a worker names the backend's Secret: <component>-kafka
-    providerConfig: lab-kafka
+    providerConfig: platform-kafka # the platform's connection, the same name on every cluster
     user: ""        # default: the namespace with '_' (logistics-uat -> logistics_uat)
     topicPrefix: "" # default: <env>.<product>. from the namespace
     replicationFactor: 1 # LAB: a single broker; RSSB's cluster takes 3

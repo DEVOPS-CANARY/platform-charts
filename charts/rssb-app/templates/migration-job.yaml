@@ -10,6 +10,7 @@ If the migration fails, the sync stops and the old version keeps running.
 */ -}}
 {{- range $name, $comp := .Values.components }}
 {{- $c := include "rssb-app.component" (dict "root" $ "name" $name "comp" $comp) | fromYaml }}
+{{- if include "rssb-app.imageReady" $c }}
 {{- if $c.migration.enabled }}
 {{- if not $c.migration.command }}
 {{- fail (printf "components.%s.migration.enabled needs migration.command" $name) }}
@@ -70,5 +71,6 @@ spec:
       volumes:
         - name: tmp
           emptyDir: {}
+{{- end }}
 {{- end }}
 {{- end }}

@@ -1,5 +1,6 @@
 {{- range $name, $comp := .Values.components }}
 {{- $c := include "rssb-app.component" (dict "root" $ "name" $name "comp" $comp) | fromYaml }}
+{{- if include "rssb-app.imageReady" $c }}
 {{- $labels := dict "root" $ "name" $name "type" $c.type }}
 ---
 apiVersion: apps/v1
@@ -210,5 +211,6 @@ spec:
         target:
           type: Utilization
           averageUtilization: {{ $c.autoscaling.targetCPUUtilizationPercentage }}
+{{- end }}
 {{- end }}
 {{- end }}

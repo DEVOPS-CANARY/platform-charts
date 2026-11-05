@@ -29,6 +29,18 @@ Call with (dict "root" $ "name" $name "comp" $comp); returns YAML.
 {{- include "rssb-app.merge" (dict "base" $withType "over" .comp) -}}
 {{- end -}}
 
+{{- /*
+A component is deployed only once CI has written a real image digest. The onboarding
+renders the environment with the all-zero placeholder, so the GitOps merge declares the
+app (namespace, config, secrets, database, Kafka user) without a Deployment, Job or route
+that could never pull: nothing fails, nothing retries, and the first pipeline deploy
+brings the pods. Returns "true" or "" (usable in `if`).
+*/ -}}
+{{- define "rssb-app.imageReady" -}}
+{{- $d := .image.digest | default "" -}}
+{{- if and $d (ne $d "sha256:0000000000000000000000000000000000000000000000000000000000000000") -}}true{{- end -}}
+{{- end -}}
+
 {{- define "rssb-app.partOf" -}}
 {{- .Values.partOf | default .Release.Name -}}
 {{- end -}}

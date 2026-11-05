@@ -157,7 +157,8 @@ typeDefaults:
 #     type: nestjs
 #     image:
 #       repository: ghcr.io/devops-canary/logistics-backend
-#       digest: sha256:...   # CI writes this line
+#       digest: sha256:...   # CI writes this line; with the all-zero placeholder the
+#                            # component is declared but not deployed (no pods, no Job, no route)
 #     port: 3001
 #     secretRefs: [backend-secrets]
 #     ingress: { enabled: true, path: /api, stripPrefix: true }
